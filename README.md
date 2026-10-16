@@ -1,12 +1,21 @@
 # cursor-gd-bridge
 
+[![Download latest release](https://img.shields.io/badge/download-latest-2ea44f?style=flat-square)](https://github.com/ElCanu/cursor-gd-bridge/releases/latest)
+
 Small Windows executable that speaks the **OpenAI** chat API on `127.0.0.1` and turns each request into a **Cursor Cloud Agent** (no repository: the diff lives in the prompt). GitHub Desktop can use it as a custom provider to generate commit messages.
 
 This is not an official Cursor or GitHub endpoint. Latency comes from the agent (often several seconds, sometimes close to a minute), not from the binary.
 
 The bridge stores **no** API keys and has **no** config file for secrets. Desktop sends the Cursor key, model id, and diff on every request; the exe only forwards them.
 
-## Requirements
+## Download (Windows x64)
+
+1. Download **[cursor-gd-bridge.exe](https://github.com/ElCanu/cursor-gd-bridge/releases/latest/download/cursor-gd-bridge.exe)** (or open [Releases](https://github.com/ElCanu/cursor-gd-bridge/releases/latest) for notes).
+2. Run it once (or add a shortcut to your Startup folder). No installer.
+
+You may need the [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) if Windows reports a missing runtime.
+
+## Requirements (build from source)
 
 - Windows x64
 - Visual Studio 2022 (MSVC) with the C++ workload
@@ -73,3 +82,14 @@ curl.exe -sS http://127.0.0.1:18789/v1/chat/completions `
 - One Cloud Agent run per commit message (Cursor quota).
 - No local Cursor agent, no tray icon, no installer.
 - If Desktop sends `stream: true`, the SSE body is sent in one shot after the agent finishes.
+
+## Publish a release (maintainers)
+
+Pushing a version tag builds `cursor-gd-bridge.exe` on GitHub Actions and attaches it to a new release:
+
+```powershell
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Use semantic tags (`v0.1.1`, `v1.0.0`, …). Every push to `main` also runs a compile-only CI job.
